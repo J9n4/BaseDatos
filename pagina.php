@@ -1,5 +1,5 @@
 <?php
-// pagina.php - DASHBOARD FINAL
+
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -7,26 +7,26 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 require_once 'conexion.php';
 
-// --- OBTENER ESTADÍSTICAS ---
+
 try {
-    // 1. Clientes
+    // Clientes
     $stmt = $conn->query("SELECT COUNT(*) as total FROM Clientes");
     $totalClientes = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-    // 2. Videojuegos
+    // Videojuegos
     $stmt = $conn->query("SELECT COUNT(*) as total FROM Videojuegos");
     $totalJuegos = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-    // 3. Ventas
+    // Ventas
     $stmt = $conn->query("SELECT COUNT(*) as total FROM Transacciones");
     $totalVentas = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // 4. Dinero
+    // Dinero
     $stmt = $conn->query("SELECT SUM(total) as dinero FROM Transacciones");
     $filaDinero = $stmt->fetch(PDO::FETCH_ASSOC);
     $totalDinero = $filaDinero['dinero'] ? $filaDinero['dinero'] : 0;
 
-    // 5. Logs (Auditoría)
+    // Logs
     $stmt = $conn->query("SELECT COUNT(*) as total FROM logs");
     $totalLogs = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 

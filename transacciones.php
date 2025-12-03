@@ -1,5 +1,5 @@
 <?php
-// 1. SEGURIDAD Y CONEXIÓN
+
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -10,7 +10,7 @@ require_once 'conexion.php';
 $mensaje = "";
 $tipo_mensaje = "";
 
-// --- PRE-CARGA DE DATOS (Selects) ---
+
 $listaClientes = [];
 $listaJuegos = [];
 
@@ -22,7 +22,7 @@ try {
     $listaJuegos = $stmtV->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) { }
 
-// --- LÓGICA CRUD ---
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         if ($_POST['accion'] == 'agregar') {

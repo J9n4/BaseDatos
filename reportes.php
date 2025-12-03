@@ -10,7 +10,7 @@ $resultadoEscalar = null;
 $resultadosTabla = [];
 $clienteSeleccionado = "";
 
-// 1. CARGAR LISTAS
+
 try {
     $stmt = $conn->query("SELECT id_cliente, nombre, apellido FROM Clientes ORDER BY nombre");
     $listaClientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,15 +21,15 @@ try {
     $listaClientes = []; $listaPlataformas = [];
 }
 
-// 2. LÓGICA PHP
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // A) FUNCIÓN ESCALAR (Total Gastado)
+    //  FUNCIÓN ESCALAR
     if (isset($_POST['btn_escalar'])) {
         $id = $_POST['id_cliente_reporte'];
         $clienteSeleccionado = $_POST['nombre_cliente_hidden']; 
         try {
-            // Asegúrate que la función exista en SQL: dbo.fn_TotalGastadoCliente
+            
             $sql = "SELECT dbo.fn_TotalGastadoCliente(?) as TotalGastado";
             $stmt = $conn->prepare($sql);
             $stmt->execute([$id]);
@@ -38,11 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } catch (Exception $e) { $resultadoEscalar = "Error"; }
     }
 
-    // B) FUNCIÓN TABLA (Juegos por Plataforma)
+    //  FUNCIÓN TABLA 
     if (isset($_POST['btn_tabla'])) {
         $plat = $_POST['plataforma_reporte'];
         try {
-            // Asegúrate que la función exista en SQL: dbo.fn_JuegosPorPlataforma
+            
             $sql = "SELECT * FROM dbo.fn_JuegosPorPlataforma(?)";
             $stmt = $conn->prepare($sql);
             $stmt->execute([$plat]);

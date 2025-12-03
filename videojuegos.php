@@ -1,5 +1,5 @@
 <?php
-// videojuegos.php CORREGIDO
+
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -12,9 +12,9 @@ $tipo_mensaje = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        // A) AGREGAR
+       
         if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
-            // Fíjate que aquí no falte nada antes de $sql
+            
             $sql = "EXEC sp_Videojuegos_Crear ?, ?, ?, ?";
             $stmt = $conn->prepare($sql);
             $stmt->execute([
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $tipo_mensaje = "success";
         }
         
-        // B) MODIFICAR
+       
         elseif (isset($_POST['accion']) && $_POST['accion'] == 'modificar') {
             $sql = "EXEC sp_Videojuegos_Actualizar ?, ?, ?, ?, ?";
             $stmt = $conn->prepare($sql);
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $tipo_mensaje = "success";
         }
         
-        // C) ELIMINAR
+        
         elseif (isset($_POST['accion']) && $_POST['accion'] == 'eliminar') {
             $sql = "EXEC sp_Videojuegos_Eliminar @id_juego = ?";
             $stmt = $conn->prepare($sql);
