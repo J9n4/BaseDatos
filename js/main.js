@@ -1,71 +1,97 @@
-/* js/main.js */
+/* js/main.js - Archivo Completo y Corregido */
+
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("✅ JS Cargado y listo");
+
+    // =======================================================
+    // 1. LÓGICA PARA BOTONES SUPERIORES (Agregar, Modificar, Eliminar)
+    // =======================================================
+    const botonesAccion = document.querySelectorAll('.btn-action');
     
-    // --- 1. LÓGICA DE TOGGLE (Abrir/Cerrar Formularios) ---
-    document.querySelectorAll('.btn-action').forEach(btn => {
-        btn.addEventListener('click', () => {
+    botonesAccion.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // EL CAMBIO IMPORTANTE: Prevenir comportamiento por defecto
+            e.preventDefault(); 
+            
             const targetId = btn.getAttribute('data-target');
             const targetForm = document.getElementById(targetId);
             
-            // Verificamos si ya está visible
-            const isVisible = targetForm.style.display === 'block';
-            
-            // Ocultamos TODOS los formularios primero
-            document.querySelectorAll('.form-section').forEach(f => f.style.display = 'none');
+            if (targetForm) {
+                console.log("Abriendo formulario:", targetId);
 
-            // Si no estaba visible, lo mostramos ahora
-            if (!isVisible) {
+                // 1. Ocultamos TODOS los formularios primero
+                document.querySelectorAll('.form-section').forEach(f => {
+                    f.style.display = 'none';
+                });
+
+                // 2. Mostramos SIEMPRE el formulario seleccionado
+                // (Quitamos la lógica de 'toggle' para evitar errores de rebote)
                 targetForm.style.display = 'block';
-                // Scroll suave hacia el formulario
+                
+                // 3. Hacemos scroll suave hacia el formulario
                 targetForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } else {
+                console.error("❌ Error: No existe un formulario con ID: " + targetId);
             }
         });
     });
 
-    // --- 2. LÓGICA GENÉRICA PARA LA TABLA (Editar y Eliminar) ---
+
+    // =======================================================
+    // 2. LÓGICA PARA BOTONES DENTRO DE LA TABLA (Lápiz y Basurero)
+    // =======================================================
     const tabla = document.querySelector('table');
     
     if (tabla) {
         tabla.addEventListener('click', (e) => {
             
-            // A) Click en Editar (Lápiz)
+            // --- A) CLICK EN EDITAR (LÁPIZ) ---
             const btnEdit = e.target.closest('.btn-row-edit');
             if (btnEdit) {
-                const data = JSON.parse(btnEdit.getAttribute('data-json'));
-                rellenarFormularioEditar(data);
+                e.preventDefault();
+                
+                try {
+                    // Leemos el JSON guardado en el botón
+                    const data = JSON.parse(btnEdit.getAttribute('data-json'));
+                    
+                    // Rellenamos los inputs buscando por id="mod_nombreColumna"
+                    Object.keys(data).forEach(key => {
+                        const input = document.getElementById('mod_' + key);
+                        if (input) {
+                            input.value = data[key];
+                        }
+                    });
+
+                    // Mostramos el formulario de Modificar
+                    mostrarSolo('form-modificar');
+
+                } catch (err) {
+                    console.error("Error al leer datos JSON:", err);
+                }
             }
 
-            // B) Click en Eliminar (Basurero)
+            // --- B) CLICK EN ELIMINAR (BASURERO) ---
             const btnDel = e.target.closest('.btn-row-delete');
             if (btnDel) {
+                e.preventDefault();
                 const id = btnDel.getAttribute('data-id');
-                const formEliminarId = 'form-eliminar'; // ID estándar del formulario eliminar
                 
-                // Llenamos el input oculto (Debe tener ID 'del_id')
+                // Ponemos el ID en el input oculto del formulario eliminar
                 const inputDel = document.getElementById('del_id');
-                if(inputDel) inputDel.value = id;
+                if(inputDel) {
+                    inputDel.value = id;
+                }
 
-                mostrarSolo(formEliminarId);
+                // Mostramos el formulario de Eliminar
+                mostrarSolo('form-eliminar');
             }
         });
     }
 
-    // --- FUNCIONES AUXILIARES ---
-
-    function rellenarFormularioEditar(data) {
-        // Esta es la magia: Recorre todas las columnas que vienen de la BD
-        // y busca si existe un input con ID "mod_" + nombre_columna
-        Object.keys(data).forEach(key => {
-            const inputId = 'mod_' + key; 
-            const input = document.getElementById(inputId);
-            if (input) {
-                input.value = data[key];
-            }
-        });
-        
-        mostrarSolo('form-modificar');
-    }
-
+    // =======================================================
+    // 3. FUNCIONES AUXILIARES
+    // =======================================================
     function mostrarSolo(formId) {
         // Oculta todos
         document.querySelectorAll('.form-section').forEach(f => f.style.display = 'none');
@@ -77,166 +103,5 @@ document.addEventListener('DOMContentLoaded', () => {
             form.scrollIntoView({ behavior: 'smooth' });
         }
     }
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Lógica para botones superiores (Agregar, Modificar, Quitar)
-    const botonesAccion = document.querySelectorAll('.btn-action');
-    botonesAccion.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const targetId = btn.getAttribute('data-target');
-            const targetForm = document.getElementById(targetId);
-            
-            // Si ya está visible, al hacer click lo ocultamos (toggle)
-            const isVisible = targetForm.style.display === 'block';
-            
-            // Ocultamos TODOS primero
-            document.querySelectorAll('.form-section').forEach(f => f.style.display = 'none');
-
-            // Si no estaba visible, lo mostramos
-            if (!isVisible) {
-                targetForm.style.display = 'block';
-                targetForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
-
-    // 2. Lógica para botones dentro de la tabla (Lápiz y Basurero)
-    const tabla = document.querySelector('table');
-    if (tabla) {
-        tabla.addEventListener('click', (e) => {
-            
-            // Click en Lápiz (Editar)
-            const btnEdit = e.target.closest('.btn-row-edit');
-            if (btnEdit) {
-                const data = JSON.parse(btnEdit.getAttribute('data-json'));
-                rellenarFormularioEditar(data);
-            }
-
-            // Click en Basurero (Eliminar)
-            const btnDel = e.target.closest('.btn-row-delete');
-            if (btnDel) {
-                const id = btnDel.getAttribute('data-id');
-                // Llenamos el input oculto del formulario eliminar
-                const inputDel = document.getElementById('del_id');
-                if(inputDel) inputDel.value = id;
-                
-                mostrarSolo('form-eliminar');
-            }
-        });
-    }
-
-    // Funciones auxiliares
-    function rellenarFormularioEditar(data) {
-        // Busca inputs que coincidan con "mod_" + nombre_columna
-        Object.keys(data).forEach(key => {
-            const inputId = 'mod_' + key; 
-            const input = document.getElementById(inputId);
-            if (input) {
-                input.value = data[key];
-            }
-        });
-        mostrarSolo('form-modificar');
-    }
-
-    function mostrarSolo(formId) {
-        document.querySelectorAll('.form-section').forEach(f => f.style.display = 'none');
-        const form = document.getElementById(formId);
-        if(form) {
-            form.style.display = 'block';
-            form.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. BOTONES DE ACCIÓN (Agregar, Modificar, Eliminar)
-    const botonesAccion = document.querySelectorAll('.btn-action');
-    
-    botonesAccion.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            // Prevenir comportamiento por defecto si fuera un enlace
-            e.preventDefault();
-
-            const targetId = btn.getAttribute('data-target');
-            const targetForm = document.getElementById(targetId);
-            
-            if (targetForm) {
-                // Si ya está visible, lo ocultamos (toggle)
-                const isVisible = targetForm.style.display === 'block';
-                
-                // Ocultamos TODOS primero
-                document.querySelectorAll('.form-section').forEach(f => f.style.display = 'none');
-
-                // Si no estaba visible, lo mostramos
-                if (!isVisible) {
-                    targetForm.style.display = 'block';
-                    // Scroll suave hacia el formulario
-                    targetForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            } else {
-                console.error('No se encontró el formulario con ID:', targetId);
-            }
-        });
-    });
-
-    // 2. BOTONES DENTRO DE LA TABLA (Lápiz y Basurero)
-    const tabla = document.querySelector('table');
-    if (tabla) {
-        tabla.addEventListener('click', (e) => {
-            
-            // Click en Lápiz (Editar)
-            const btnEdit = e.target.closest('.btn-row-edit');
-            if (btnEdit) {
-                // Evitar que recargue
-                e.preventDefault(); 
-                const dataString = btnEdit.getAttribute('data-json');
-                console.log("Datos recibidos:", dataString); // Para depurar
-
-                try {
-                    const data = JSON.parse(dataString);
-                    rellenarFormularioEditar(data);
-                } catch (error) {
-                    console.error("Error al leer JSON:", error);
-                }
-            }
-
-            // Click en Basurero (Eliminar)
-            const btnDel = e.target.closest('.btn-row-delete');
-            if (btnDel) {
-                e.preventDefault();
-                const id = btnDel.getAttribute('data-id');
-                
-                // Llenamos el input oculto del formulario eliminar
-                const inputDel = document.getElementById('del_id');
-                if(inputDel) inputDel.value = id;
-                
-                mostrarSolo('form-eliminar');
-            }
-        });
-    }
-
-    // Funciones auxiliares
-    function rellenarFormularioEditar(data) {
-        // Busca inputs que coincidan con "mod_" + nombre_columna
-        Object.keys(data).forEach(key => {
-            const inputId = 'mod_' + key; 
-            const input = document.getElementById(inputId);
-            if (input) {
-                input.value = data[key];
-            }
-        });
-        mostrarSolo('form-modificar');
-    }
-
-    function mostrarSolo(formId) {
-        document.querySelectorAll('.form-section').forEach(f => f.style.display = 'none');
-        const form = document.getElementById(formId);
-        if(form) {
-            form.style.display = 'block';
-            form.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
 });

@@ -255,3 +255,90 @@ body.login-body {
     margin: 0 5px;
 }
 .btn-row-edit:hover, .btn-row-delete:hover { transform: scale(1.2); }
+
+.report-section {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.report-section:hover {
+    transform: translateY(-2px);
+}
+
+/* Colores específicos para los bordes superiores */
+.border-orange { border-top: 5px solid #ff9800; }
+.border-purple { border-top: 5px solid #9c27b0; }
+
+/* Títulos de los reportes */
+.report-title {
+    margin-top: 0;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.text-orange { color: #f57c00; }
+.text-purple { color: #7b1fa2; }
+
+/* Barra de búsqueda dentro del reporte (Select + Botón) */
+.search-bar {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap; /* Para que se adapte en móviles */
+    margin-top: 15px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Estilo para los Selects (Desplegables) */
+.search-bar select {
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 50px; /* Redondeado igual que los botones */
+    min-width: 250px;
+    outline: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Botones de Reporte (Submit) */
+.btn-report {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-report:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+.bg-orange { background-color: #ff9800; }
+.bg-orange:hover { background-color: #f57c00; }
+.bg-purple { background-color: #9c27b0; }
+.bg-purple:hover { background-color: #7b1fa2; }
+
+/* Caja de Resultado (Donde sale el total gastado) */
+.result-box {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #e3f2fd;
+    border-left: 5px solid #2196f3;
+    border-radius: 4px;
+    color: #0d47a1;
+    font-size: 1.1rem;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
