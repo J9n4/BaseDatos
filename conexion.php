@@ -1,7 +1,7 @@
 <?php
 
 $nombreServidor = "J9N4"; 
-$nombreBaseDatos = "Guia"; 
+$nombreBaseDatos = "Certamen2"; 
 $usuario = "sa"; 
 $password = "1234"; 
 
