@@ -342,3 +342,39 @@ body.login-body {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.log-container {
+    background: #2d3436; /* Fondo oscuro estilo terminal */
+    color: #55efc4;      /* Texto verde claro */
+    font-family: 'Consolas', 'Courier New', monospace;
+    padding: 20px;
+    border-radius: 8px;
+    height: 450px;
+    overflow-y: auto;    /* Scroll si hay muchos logs */
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+    border: 1px solid #636e72;
+}
+
+.log-entry {
+    border-bottom: 1px solid #636e72;
+    padding: 10px 0;
+    font-size: 0.95rem;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-date {
+    color: #b2bec3;
+    margin-right: 15px;
+    font-size: 0.85rem;
+}
+
+.log-action {
+    color: #ffeaa7; /* Amarillo */
+    font-weight: bold;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+Paso 3: Crear el arc
